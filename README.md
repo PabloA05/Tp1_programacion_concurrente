@@ -1,3 +1,3 @@
 # Tp1_programacion_concurrente
 
-Trabajo Practico numero 1 de Programación Concurrente
+Trabajo Práctico numero 1 de Programación Concurrente
