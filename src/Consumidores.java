@@ -7,10 +7,12 @@ public class Consumidores implements Runnable {
 
     @Override
     public void run() {
-       // try {
 
-        //} catch (InterruptedException e) {
-       //     e.printStackTrace();
-     //   }
+        try {
+           Thread.currentThread().sleep( buffer.consume(this));
+
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }

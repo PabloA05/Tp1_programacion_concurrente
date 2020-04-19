@@ -14,14 +14,19 @@ public class Main {
         }
 
 
-        for (int i = 0; i < 5; i++) {
-            productores[i].start();
-            //try {}catch (){}
+        try {
+            for (int i = 0; i < 5; i++) {
+                productores[i].start();
+                //try {}catch (){}
+            }
+            for (int i = 0; i < 10; i++) {
+                consumidores[i].start();
+                //try {}catch (){}
+            }
+        }finally {
+            Thread.interrupted();
         }
-        for (int i = 0; i < 10; i++) {
-            consumidores[i].start();
-            //try {}catch (){}
-        }
+        if (buffer.num==10) { System.out.printf("NUMERO %s\n",buffer.num);}// no anda
 
 
     }
