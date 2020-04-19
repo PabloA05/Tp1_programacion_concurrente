@@ -28,7 +28,7 @@ public class Productores implements Runnable {
     }
 
     private Producto head_list_products() {
-        return list_products.pollFirst();
+        return list_products.getFirst();
     }
 
 
@@ -37,6 +37,7 @@ public class Productores implements Runnable {
         try {
             cocinar();
             buffer.reposition(head_list_products());
+            //System.out.printf("lista %s\n",head_list_products().get_product());
             discard();
 
         } catch (InterruptedException e) {
