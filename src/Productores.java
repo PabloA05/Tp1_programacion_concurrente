@@ -9,13 +9,13 @@ public class Productores implements Runnable {
         this.buffer = buffer;
     }
 
-    private void cocinar() {
+    private void cocinar() throws InterruptedException {
         int rand = ThreadLocalRandom.current().nextInt(1, 200 + 1);
         this.producto_add(new Producto(rand));
-        try {
-            wait(rand); // espera rand entre 1 y 200 ms
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+
+        Thread.currentThread().sleep(rand);
+        if (Thread.interrupted()) {
+            throw new InterruptedException();
         }
     }
 
@@ -27,11 +27,21 @@ public class Productores implements Runnable {
         list_products.remove();
     }
 
+    private Producto head_list_products() {
+        return list_products.pollFirst();
+    }
+
 
     @Override
     public void run() {
+        try {
+            cocinar();
+            buffer.reposition(head_list_products());
+            discard();
 
-
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }
 
