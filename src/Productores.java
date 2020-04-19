@@ -4,7 +4,7 @@ import java.util.Random;
 public class Productores implements Runnable {
     private Buffer buffer;
 
-    private final Vector<Producto> elementos = new Vector();
+    private final Vector<Integer> elementos = new Vector();
     Random rand = new Random();
 
     public Productores(Buffer buffer) {
@@ -12,7 +12,6 @@ public class Productores implements Runnable {
     }
 
     private synchronized void cocinar() throws Exception {
-        
 
 
     }
