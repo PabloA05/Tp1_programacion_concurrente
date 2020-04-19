@@ -90,7 +90,4 @@ fabric.properties
 .idea/**/markdown-navigator.xml
 .idea/**/markdown-navigator/
 
-# Log.txt
-log.txt
-
 # End of https://www.gitignore.io/api/intellij
