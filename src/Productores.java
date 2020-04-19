@@ -3,8 +3,6 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class Productores implements Runnable {
     private Buffer buffer;
-
-
     private LinkedList<Producto> list_products = new LinkedList<>();
 
     public Productores(Buffer buffer) {
@@ -32,6 +30,7 @@ public class Productores implements Runnable {
 
     @Override
     public void run() {
+
 
     }
 }

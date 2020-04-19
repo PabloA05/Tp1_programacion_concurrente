@@ -1,15 +1,16 @@
 public class Main {
     public static void main(String[] args) {
 
-        Buffer buffer = new Buffer();
+        boolean fairMode = true;
+        Buffer buffer = new Buffer(fairMode);
 
-        Thread productores[]=new Thread[5];
+        Thread productores[] = new Thread[5];
         for (int i = 0; i < 5; i++) {
-            productores[i]=new Thread(new Productores(buffer));
+            productores[i] = new Thread(new Productores(buffer));
         }
-        Thread consumidores[]=new Thread[10];
+        Thread consumidores[] = new Thread[10];
         for (int i = 0; i < 10; i++) {
-            consumidores[i]=new Thread(new Consumidores(buffer));
+            consumidores[i] = new Thread(new Consumidores(buffer));
         }
 
 
