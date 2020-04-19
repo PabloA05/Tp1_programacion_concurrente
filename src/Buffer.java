@@ -1,27 +1,40 @@
-import java.util.LinkedList;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.concurrent.LinkedBlockingQueue;
 
 public class Buffer {
 
-    private LinkedList<Integer> store_list=new LinkedList<Integer>();
-    private Lock listLock;
-    private int num=0;
+    public LinkedBlockingQueue<Producto> store_queue = new LinkedBlockingQueue<Producto>(24); //cola con finita cantidad
+    public int num = 0;
+    private Lock queue_store;
 
     public Buffer(boolean fairMode) {
-        listLock = new ReentrantLock(fairMode);
-    }
-    private void add_toStore(int e){
-        store_list.add(e);
-    }
-    private void remove_fromStore(){
-        store_list.remove();
+        queue_store = new ReentrantLock(fairMode);
     }
 
-    public void consume() {
+
+    private void remove_fromStore() {
+        store_queue.remove();
     }
 
-    public void reposition(Producto product) {
+    public void consume() throws InterruptedException {
+        queue_store.lock();
+
+    }
+
+    public void reposition(Productores productores) {
+        queue_store.lock();
+        try {
+            store_queue.offer(productores.head_list_products()); //tira una excepsion falsa si esta llena la cola
+            Thread.currentThread().wait(productores.head_list_products().get_product());
+            productores.discard();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            productores.discard();
+        } finally {
+            queue_store.unlock();
+        }
     }
 }
 

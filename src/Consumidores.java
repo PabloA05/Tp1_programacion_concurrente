@@ -7,5 +7,10 @@ public class Consumidores implements Runnable {
 
     @Override
     public void run() {
+       // try {
+
+        //} catch (InterruptedException e) {
+       //     e.printStackTrace();
+     //   }
     }
 }

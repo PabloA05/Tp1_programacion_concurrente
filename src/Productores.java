@@ -13,7 +13,7 @@ public class Productores implements Runnable {
         int rand = ThreadLocalRandom.current().nextInt(1, 200 + 1);
         this.producto_add(new Producto(rand));
 
-        Thread.currentThread().sleep(rand);
+       // Thread.currentThread().sleep(rand);
         if (Thread.interrupted()) {
             throw new InterruptedException();
         }
@@ -23,11 +23,11 @@ public class Productores implements Runnable {
         list_products.add(producto);
     }
 
-    private void discard() {
+    public void discard() {
         list_products.remove();
     }
 
-    private Producto head_list_products() {
+    public Producto head_list_products() {
         return list_products.getFirst();
     }
 
@@ -36,9 +36,10 @@ public class Productores implements Runnable {
     public void run() {
         try {
             cocinar();
-            buffer.reposition(head_list_products());
+            buffer.reposition(this);//no se que si esta bien
+
             //System.out.printf("lista %s\n",head_list_products().get_product());
-            discard();
+           // discard();
 
         } catch (InterruptedException e) {
             e.printStackTrace();
