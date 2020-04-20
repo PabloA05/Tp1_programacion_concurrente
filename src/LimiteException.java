@@ -1,5 +1,5 @@
 /**
- * Lo use para tirar true o false cuando lo necesito
+ * Lo use para tirar true o false cuando lo necesito reposition or consume
  * */
 public class LimiteException extends Exception {
     boolean logic;
