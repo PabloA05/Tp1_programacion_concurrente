@@ -12,6 +12,10 @@ public class Productores implements Runnable {
     private void cocinar() throws InterruptedException {
         int rand = ThreadLocalRandom.current().nextInt(1, 200 + 1);
         this.producto_add(new Producto(rand));
+        for (int i = 0; i < list_products.size(); i++) {
+            System.out.println("entro al for, entonces se cargaron los numeros, entonces concinar anda");
+           // System.out.println(list_products.peekFirst().get_product());
+        }
 
        // Thread.currentThread().sleep(rand);
         if (Thread.interrupted()) {
@@ -36,7 +40,7 @@ public class Productores implements Runnable {
     public void run() {
         try {
             cocinar();
-            buffer.reposition(this);//no se que si esta bien
+            buffer.reposition(this);//Le estoy pasando el objeto buffer y list_products
 
             //System.out.printf("lista %s\n",head_list_products().get_product());
            // discard();

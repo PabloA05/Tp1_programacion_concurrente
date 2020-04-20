@@ -4,13 +4,15 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 public class Buffer {
 
-    public LinkedBlockingQueue<Producto> store_queue = new LinkedBlockingQueue<Producto>(24); //cola con finita cantidad
+
     public int num;
     private Lock lockQueue;
+    public LinkedBlockingQueue<Producto> store_queue;
 
 
     public Buffer(boolean fairMode) {
         lockQueue = new ReentrantLock(fairMode);
+        new LinkedBlockingQueue<Producto>(24); //cola con finita cantidad
     }
 
 
@@ -21,8 +23,10 @@ public class Buffer {
     public int consume(Consumidores consumidores) {
         lockQueue.lock();
         try {
-            if (store_queue.isEmpty()) {
-                num++;
+            if (!store_queue.isEmpty()) {
+                synchronized (this){
+                    num++;
+                }
                 System.out.printf("numero en el try %s\n", num);
 
                 System.out.println(store_queue.isEmpty());
@@ -35,7 +39,7 @@ public class Buffer {
 
         //for (int i = 0; i < 10; i++) {
         System.out.println("largo comida: " + store_queue.size());
-        System.out.println(store_queue.peek().get_product());
+        //System.out.println(store_queue.peek().get_product());
         System.out.println("esta vacia comida? " + store_queue.isEmpty());
         //}
         lockQueue.unlock();
