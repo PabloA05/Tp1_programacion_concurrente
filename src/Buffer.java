@@ -1,3 +1,4 @@
+import java.util.LinkedList;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -49,17 +50,19 @@ public class Buffer {
 
     }
 
-    public void reposition(Productores productores) {
+
+
+    public void reposition1(int productores_list) {
         lockQueue.lock();
         try {
-            System.out.println(productores.head_list_products().get_product());
-            store_queue.offer(productores.head_list_products()); //tira una excepsion falsa si esta llena la cola
-            Thread.currentThread().sleep(productores.head_list_products().get_product());
-            productores.discard();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+            System.out.println("reposition"+ productores_list);
+            //store_queue.offer(productores_list.peekFirst()); //tira una excepsion falsa si esta llena la cola
+
+      /*  } catch (InterruptedException e) {
+            e.printStackTrace();*/
         } catch (Exception e) {
-            productores.discard();
+            e.printStackTrace();
+           // productores_list.discard();
         } finally {
             lockQueue.unlock();
         }

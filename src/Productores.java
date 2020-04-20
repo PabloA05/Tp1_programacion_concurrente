@@ -40,9 +40,10 @@ public class Productores implements Runnable {
     public void run() {
         try {
             cocinar();
-            buffer.reposition(this);//Le estoy pasando el objeto buffer y list_products
+            System.out.printf("lista %s\n",head_list_products().get_product());
+            buffer.reposition1(head_list_products().get_product());//Le estoy pasando list_products
 
-            //System.out.printf("lista %s\n",head_list_products().get_product());
+
            // discard();
 
         } catch (InterruptedException e) {

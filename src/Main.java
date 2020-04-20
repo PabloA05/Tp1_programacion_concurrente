@@ -19,19 +19,19 @@ public class Main {
                 productores[i].start();
                 //try {}catch (){}
             }
-            for (int i = 0; i < 10; i++) {
+           /* for (int i = 0; i < 10; i++) {
                 consumidores[i].start();
-                //try {}catch (){}
-            }
+                //try {}catch (){}*/
+           // }
         } finally {
             Thread.interrupted();
         }
 
 
-        if (buffer.num == 10) {
+       /* if (buffer.num == 10) {
             System.out.printf("NUMERO %s\n", buffer.num);
         }// no anda
-
+*/
 
       /*  while (true) {
             try {

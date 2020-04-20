@@ -10,8 +10,8 @@ public class Consumidores implements Runnable {
 
         try {
            buffer.consume(this);
-            Thread.currentThread().sleep( buffer.consume(this));
-           // System.out.println(a);
+           Thread.currentThread().sleep( buffer.consume(this));
+
         } catch (InterruptedException e) {
             //e.printStackTrace();
             System.out.println("entra en el catch de consumidores");

@@ -1,0 +1,14 @@
+/**
+ * Lo use para tirar true o false cuando lo necesito
+ * */
+public class LimiteException extends Exception {
+    boolean logic;
+
+    public LimiteException(boolean id) {
+        this.logic = id;
+    }
+
+    public boolean aBoolean(boolean a) {
+        return logic;
+    }
+}
