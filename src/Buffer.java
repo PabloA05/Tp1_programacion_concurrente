@@ -8,12 +8,12 @@ public class Buffer {
 
     public int num;
     private Lock lockQueue;
-    public LinkedBlockingQueue<Producto> store_queue;
+    public LinkedBlockingQueue<Integer> store_queue=new LinkedBlockingQueue<Integer>(24);;
 
 
     public Buffer(boolean fairMode) {
         lockQueue = new ReentrantLock(fairMode);
-        new LinkedBlockingQueue<Producto>(24); //cola con finita cantidad
+         //cola con finita cantidad
     }
 
 
@@ -28,10 +28,10 @@ public class Buffer {
                 synchronized (this){
                     num++;
                 }
-                System.out.printf("numero en el try %s\n", num);
+                System.out.printf(Thread.currentThread().getName()+" numero en el try %s\n", num);
 
                 System.out.println(store_queue.isEmpty());
-                return store_queue.poll().get_product();
+                return store_queue.poll();
             }
         } catch (NullPointerException e) {
             throw new NullPointerException();
@@ -39,9 +39,9 @@ public class Buffer {
 
 
         //for (int i = 0; i < 10; i++) {
-        System.out.println("largo comida: " + store_queue.size());
+        System.out.println(Thread.currentThread().getName()+" largo comida: " + store_queue.size());
         //System.out.println(store_queue.peek().get_product());
-        System.out.println("esta vacia comida? " + store_queue.isEmpty());
+        System.out.println(Thread.currentThread().getName()+" esta vacia comida? " + store_queue.isEmpty());
         //}
         lockQueue.unlock();
 
@@ -55,7 +55,9 @@ public class Buffer {
     public void reposition1(int productores_list) {
         lockQueue.lock();
         try {
-            System.out.println("reposition"+ productores_list);
+            System.out.println(Thread.currentThread().getName()+" entro a reposition "+ productores_list);
+            store_queue.offer(productores_list);
+
             //store_queue.offer(productores_list.peekFirst()); //tira una excepsion falsa si esta llena la cola
 
       /*  } catch (InterruptedException e) {
@@ -67,9 +69,7 @@ public class Buffer {
             lockQueue.unlock();
         }
 
-        System.out.println("largo: " + store_queue.size());
-        System.out.println(store_queue.peek().get_product());
-        System.out.println("esta vacia? " + store_queue.isEmpty());
+
 
     }
 }

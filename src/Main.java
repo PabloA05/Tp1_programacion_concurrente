@@ -25,7 +25,11 @@ public class Main {
            // }
         } finally {
             Thread.interrupted();
+            for (int i = 0; i < buffer.store_queue.size(); i++) {
+                System.out.println("buffer numers: "+buffer.store_queue.peek());
+            }
         }
+
 
 
        /* if (buffer.num == 10) {
