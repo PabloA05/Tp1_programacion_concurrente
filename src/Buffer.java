@@ -6,38 +6,49 @@ public class Buffer {
 
     public LinkedBlockingQueue<Producto> store_queue = new LinkedBlockingQueue<Producto>(24); //cola con finita cantidad
     public int num;
-    private Lock queue_store;
+    private Lock lockQueue;
 
 
     public Buffer(boolean fairMode) {
-        queue_store = new ReentrantLock(fairMode);
+        lockQueue = new ReentrantLock(fairMode);
     }
 
 
     //private void remove_fromStore() {
-     //   store_queue.remove();
+    //   store_queue.remove();
     //}
 
     public int consume(Consumidores consumidores) {
-        queue_store.lock();
+        lockQueue.lock();
         try {
+            if (store_queue.isEmpty()) {
+                num++;
+                System.out.printf("numero en el try %s\n", num);
 
-            num++;
-            System.out.printf("numero en el try %s\n", num);
-
-
-
-        } finally {
-            queue_store.unlock();
-
+                System.out.println(store_queue.isEmpty());
+                return store_queue.poll().get_product();
+            }
+        } catch (NullPointerException e) {
+            throw new NullPointerException();
         }
-        return  store_queue.poll().get_product() ;
+
+
+        //for (int i = 0; i < 10; i++) {
+        System.out.println("largo comida: " + store_queue.size());
+        System.out.println(store_queue.peek().get_product());
+        System.out.println("esta vacia comida? " + store_queue.isEmpty());
+        //}
+        lockQueue.unlock();
+
+        return -9999;
+
 
     }
 
     public void reposition(Productores productores) {
-        queue_store.lock();
+        lockQueue.lock();
         try {
+            System.out.println(productores.head_list_products().get_product());
             store_queue.offer(productores.head_list_products()); //tira una excepsion falsa si esta llena la cola
             Thread.currentThread().sleep(productores.head_list_products().get_product());
             productores.discard();
@@ -46,8 +57,13 @@ public class Buffer {
         } catch (Exception e) {
             productores.discard();
         } finally {
-            queue_store.unlock();
+            lockQueue.unlock();
         }
+
+        System.out.println("largo: " + store_queue.size());
+        System.out.println(store_queue.peek().get_product());
+        System.out.println("esta vacia? " + store_queue.isEmpty());
+
     }
 }
 

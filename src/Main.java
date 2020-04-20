@@ -23,11 +23,26 @@ public class Main {
                 consumidores[i].start();
                 //try {}catch (){}
             }
-        }finally {
+        } finally {
             Thread.interrupted();
         }
-        if (buffer.num==10) { System.out.printf("NUMERO %s\n",buffer.num);}// no anda
 
+
+        if (buffer.num == 10) {
+            System.out.printf("NUMERO %s\n", buffer.num);
+        }// no anda
+
+
+      /*  while (true) {
+            try {
+                System.out.println("numero: "+buffer.store_queue.peek().get_product());
+            } catch (NullPointerException e) {
+                //e.printStackTrace();
+                System.out.println("get product 0");
+            }
+        }*/
 
     }
+
+
 }
