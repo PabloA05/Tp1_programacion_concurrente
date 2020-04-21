@@ -1,21 +1,28 @@
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
+
 public class Main {
     public static void main(String[] args) {
 
         boolean fairMode = true;
+        int productores_cantidad=30;
+
         Buffer buffer = new Buffer(fairMode);
 
-        Thread productores[] = new Thread[5];
-        for (int i = 0; i < 5; i++) {
+
+
+        Thread[] productores = new Thread[productores_cantidad];
+        for (int i = 0; i < productores_cantidad; i++) {
             productores[i] = new Thread(new Productores(buffer));
         }
-        Thread consumidores[] = new Thread[10];
+        Thread[] consumidores = new Thread[10];
         for (int i = 0; i < 10; i++) {
             consumidores[i] = new Thread(new Consumidores(buffer));
         }
 
 
         try {
-            for (int i = 0; i < 5; i++) {
+            for (int i = 0; i < productores_cantidad; i++) {
                 productores[i].start();
                 //try {}catch (){}
             }
@@ -25,9 +32,6 @@ public class Main {
            // }
         } finally {
             Thread.interrupted();
-            for (int i = 0; i < buffer.store_queue.size(); i++) {
-                System.out.println("buffer numers: "+buffer.store_queue.peek());
-            }
         }
 
 
