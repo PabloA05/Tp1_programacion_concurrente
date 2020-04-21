@@ -54,7 +54,7 @@ public class Buffer {
 
     public void reposition(int productores_list) throws LimiteException {
         lockQueue.lock();
-        if (store_queue.size() >= capacity) {
+        if (store_queue.size() >= capacity) {// Aca se limita la entrada al resto del metodo, sin esto igual no carga la lista
             lockQueue.unlock();
             throw new LimiteException(false);
 
