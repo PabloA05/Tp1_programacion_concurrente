@@ -1,7 +1,3 @@
-import java.io.IOException;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.BlockingQueue;
-
 public class Main {
     public static void main(String[] args) {
 
@@ -25,5 +21,7 @@ public class Main {
         for (int i = 0; i < consumideres_cantidad; i++) {
             consumidores[i].start();
         }
+        Thread lg=new Thread();
+        Log log
     }
 }

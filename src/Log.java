@@ -6,7 +6,7 @@ public class Log implements Runnable {
     private Buffer buffer;
     private Thread[] consumerThread;
     //private Thread[] producerThread;
-    public Log(Buffer buffer, Thread consumerThread[]){
+    public Log(Buffer buffer, Thread consumerThread[],int cantidad_consumidores){
         this.buffer= buffer;
         this.consumerThread = consumerThread;
         //this.producerThread = producerThread;
