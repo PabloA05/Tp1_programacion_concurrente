@@ -12,6 +12,7 @@ public class Log implements Runnable {
     int cantidad;
     String filepath = "log.csv";
     private Date date;
+    java.util.Date test_date=new Date();
 
 
     public Log(Buffer buffer, Thread consumerThread[], int cantidad_consumidores) {
@@ -48,7 +49,7 @@ public class Log implements Runnable {
                     e.printStackTrace();
                 }
 
-                pw.printf(date + "," + buffer.store_queue.size());
+                pw.printf(test_date + "," + buffer.store_queue.size());
                 for (int i = 0; i < cantidad; i++) {
 
                     pw.printf("," + consumerThread[i].getState());
