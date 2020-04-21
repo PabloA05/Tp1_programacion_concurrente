@@ -1,6 +1,4 @@
-
 import java.util.concurrent.locks.Condition;
-import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -33,10 +31,14 @@ public class Buffer {
                     e.printStackTrace();
                 }
             }
-
-            num++;
-            System.out.println(Thread.currentThread().getName() + " entro a consume, con el numero: " + store_queue.peek());
-            System.out.println("vacia? " + store_queue.isEmpty());
+            if(num==1000){
+                System.out.println("goal: "+num);
+            }
+            if (num <= 1000) {
+                num++;
+            }
+            //System.out.println(Thread.currentThread().getName() + " entro a consume, con el numero: " + store_queue.peek());
+            //System.out.println("vacia? " + store_queue.isEmpty());
             lockQueue.unlock();
             if (store_queue.peek() == null) {
                 System.out.println("dentro del if lista vacia, Mal!");
@@ -76,6 +78,3 @@ public class Buffer {
         }
     }
 }
-
-
-

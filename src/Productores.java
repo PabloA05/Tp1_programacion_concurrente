@@ -32,18 +32,19 @@ public class Productores implements Runnable {
 
     @Override
     public void run() {
-        try {
-            cocinar();
+        while (buffer.num<=1000){
             try {
-                buffer.reposition(head_list_products().get_product()); //Le estoy pasando un numero
-                list_products.remove(); //Lo hice asi porque podria hacer que los productores sigan produciendo
-            } catch (LimiteException e) {
-                list_products.clear();
-                System.out.println("Se elimino todo de: " + Thread.currentThread().getName());
+                cocinar();
+                try {
+                    buffer.reposition(head_list_products().get_product()); //Le estoy pasando un numero
+                    list_products.remove(); //Lo hice asi porque podria hacer que los productores sigan produciendo
+                } catch (LimiteException e) {
+                    list_products.clear();
+                    System.out.println("Se elimino todo de: " + Thread.currentThread().getName());
+                }
+            } catch (InterruptedException e) {
+                System.out.println("Paso algo muy malo en el run() de Productores");
             }
-        } catch (InterruptedException e) {
-            System.out.println("Paso algo muy malo en el run() de Productores");
         }
     }
 }
-
