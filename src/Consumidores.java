@@ -7,9 +7,12 @@ public class Consumidores implements Runnable {
 
     @Override
     public void run() {
-       while (buffer.num<=1000){
+       while (!(buffer.num==1000)){
             try {
                 Thread.sleep(buffer.consume());
+                if (buffer.num==1000){
+                    System.out.printf("Llego a %s",buffer.num);
+                }
             } catch (InterruptedException e) {
                 e.printStackTrace();
             } catch (NullPointerException e) {
