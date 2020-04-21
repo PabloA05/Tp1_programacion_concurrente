@@ -18,7 +18,7 @@ public class Productores implements Runnable {
             System.out.println(list_products.peekFirst().get_product());
         }*/
 
-       // Thread.currentThread().sleep(rand);
+        // Thread.currentThread().sleep(rand);
         if (Thread.interrupted()) {
             throw new InterruptedException();
         }
@@ -28,7 +28,7 @@ public class Productores implements Runnable {
         list_products.add(producto);
     }
 
-     public Producto head_list_products() {
+    public Producto head_list_products() {
         return list_products.getFirst();
     }
 
@@ -37,13 +37,12 @@ public class Productores implements Runnable {
     public void run() {
         try {
             cocinar();
-           // System.out.printf(Thread.currentThread().getName()+" lista run productores check %s\n",head_list_products().get_product());
-            try{
+            try {
                 buffer.reposition(head_list_products().get_product()); //Le estoy pasando list_products
                 list_products.remove();
-            }catch (LimiteException e){
+            } catch (LimiteException e) {
                 list_products.clear();
-                System.out.println("Se elimino todo de: "+ Thread.currentThread().getName());
+                System.out.println("Se elimino todo de: " + Thread.currentThread().getName());
             }
 
 

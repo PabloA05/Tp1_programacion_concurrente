@@ -57,7 +57,6 @@ public class Buffer {
         if (store_queue.size() >= capacity) {// Aca se limita la entrada al resto del metodo, sin esto igual no carga la lista
             lockQueue.unlock();
             throw new LimiteException(false);
-
         } else {
             try {
                 System.out.printf("Tamano de la lista en store:%s\n", store_queue.size());
