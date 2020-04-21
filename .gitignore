@@ -90,6 +90,8 @@ fabric.properties
 .idea/**/markdown-navigator.xml
 .idea/**/markdown-navigator/
 
+#log
 log.csv
+.~lock.log.csv#
 
 # End of https://www.gitignore.io/api/intellij
