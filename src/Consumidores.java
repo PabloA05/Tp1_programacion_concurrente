@@ -9,13 +9,12 @@ public class Consumidores implements Runnable {
     public void run() {
 
         try {
-           buffer.consume(this);
-           Thread.currentThread().sleep( buffer.consume(this));
-
+            Thread.sleep(buffer.consume());
         } catch (InterruptedException e) {
-            //e.printStackTrace();
-            System.out.println("entra en el catch de consumidores");
+            e.printStackTrace();
+        } catch (NullPointerException e) {
+            System.out.println("Algo NULL en buffer.consume(), mal!");
+            e.printStackTrace();
         }
-
     }
 }
