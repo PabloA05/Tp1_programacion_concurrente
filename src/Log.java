@@ -1,30 +1,70 @@
-import javax.swing.plaf.nimbus.State;
-import java.sql.BatchUpdateException;
+import javax.swing.*;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.Date;
 
 public class Log implements Runnable {
 
     private Buffer buffer;
     private Thread[] consumerThread;
-    //private Thread[] producerThread;
-    public Log(Buffer buffer, Thread consumerThread[],int cantidad_consumidores){
-        this.buffer= buffer;
+    int cantidad;
+    String filepath = "log.csv";
+    private Date date;
+
+
+    public Log(Buffer buffer, Thread consumerThread[], int cantidad_consumidores) {
+        this.buffer = buffer;
         this.consumerThread = consumerThread;
-        //this.producerThread = producerThread;
+        cantidad = cantidad_consumidores;
+        date=new Date();
+
     }
+
+    private static ThreadLocal<Date> starDate = new ThreadLocal<Date>() { //no anda
+        protected Date InitialValue() {
+            return new Date();
+        }
+    };
 
     @Override
     public void run() {
-       /* while(buffer.valorResta()<1000 || buffer.valorSuma()<1000){
-            try {
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+        try {
+            FileWriter fw = new FileWriter(filepath, true);
+            BufferedWriter bw = new BufferedWriter(fw);
+            PrintWriter pw = new PrintWriter(bw);
+
+            pw.printf("\"Fecha\"" + "," + "\"Buffer\"");
+            for (int i = 0; i < cantidad; i++) {
+                pw.printf("," + '"' + consumerThread[i].getName() + '"');
             }
-            System.out.println("El buffer posee:" + buffer.relleno()+" elementos.");
-            for (int i = 0;i<3;i++){
-                System.out.println("El estado de "+ consumerThread[i].getName() + " es " + consumerThread[i].getState() + "\n");
+            pw.println();
+
+            while (true) {
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                pw.printf(date + "," + buffer.store_queue.size());
+                for (int i = 0; i < cantidad; i++) {
+
+                    pw.printf("," + consumerThread[i].getState());
+                }
+                pw.println();
+                pw.flush();
+                if (buffer.num == 1000) {
+                    break;
+                }
             }
-            System.out.println("El Estado de :" + producerThread[0].getName() + " es " + producerThread[0].getState() + "\n");
-        }*/
+            pw.close();
+            JOptionPane.showMessageDialog(null, "Guardado");
+
+        } catch (
+                IOException e) {
+            JOptionPane.showMessageDialog(null, "No guardado");
+        }
     }
 }

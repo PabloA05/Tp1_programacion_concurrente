@@ -21,7 +21,8 @@ public class Main {
         for (int i = 0; i < consumideres_cantidad; i++) {
             consumidores[i].start();
         }
-        Thread lg=new Thread();
-        Log log
+        Thread log=new Thread(new Log(buffer,consumidores,consumideres_cantidad));
+        log.start();
+
     }
 }
