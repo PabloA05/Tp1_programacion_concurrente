@@ -32,11 +32,20 @@ public class Buffer {
     }*/
     private void set(int productores_list) {
         try {
+            try {
+                cenaforo.acquire();
+            } catch (InterruptedException e) {
+                System.out.println("*** Problema con el semaforo ***");
+                e.printStackTrace();
+            }
             store_queue.offer(productores_list);
+            System.out.printf("Tamano de la lista en store:%s\n", store_queue.size());
+            System.out.println(Thread.currentThread().getName() + " entro a reposition, con el numero: " + productores_list);
+            System.out.println();
         } catch (NullPointerException e) {
-            System.out.println(Thread.currentThread().getName()+"No se cargo nada en reposition");
+            System.out.println(Thread.currentThread().getName() + "*** No se cargo nada en reposition ***");
         } finally {
-            notifyAll();
+           // notifyAll();
             cenaforo.release();
         }
     }
@@ -73,22 +82,18 @@ public class Buffer {
         if (store_queue.size() >= capacity) {// Aca se limita la entrada al resto del metodo es suporfluo en realidad, sin esto igual no carga la lista
             prodLock.unlock();                 // Se hizo asi por si se queria que siga produciendo si el lock estaba ocupado, pero no se implemento porque no se pide explicitamente en el tp.
             throw new LimiteException(false);   // No llega a tocar store_queue y elimana todos los elementos de la list de produccion
-        } else if (store_queue.isEmpty()) {
+        }
+        /*else if (store_queue.isEmpty()) {
             cenaforo.acquireUninterruptibly();
             set(productores_list);
             prodLock.unlock();
-        } else {
-            try {
-                cenaforo.acquire();
-                set(productores_list);
-            } catch (InterruptedException e) {
-                System.out.println(Thread.currentThread().getName() + " No lo pude adquirir en repostion");
-                e.printStackTrace();
-            } finally {
-                prodLock.unlock();
-            }
+        }*/
+        else {
+            set(productores_list);
+            prodLock.unlock();
         }
     }
+
 
     private void get() {
 
@@ -166,7 +171,6 @@ public class Buffer {
             throw new NullPointerException();
         }*/
         //consLock.lock();
-
 
 
     }
