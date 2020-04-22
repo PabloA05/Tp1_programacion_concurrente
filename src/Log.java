@@ -15,7 +15,7 @@ public class Log implements Runnable {
     java.util.Date test_date=new Date();
 
 
-    public Log(Buffer buffer, Thread consumerThread[], int cantidad_consumidores) {
+    public Log(Buffer buffer, Thread[] consumerThread, int cantidad_consumidores) {
         this.buffer = buffer;
         this.consumerThread = consumerThread;
         cantidad = cantidad_consumidores;

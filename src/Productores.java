@@ -31,7 +31,7 @@ public class Productores implements Runnable {
     @Override
     public void run() {
 
-        while (!(buffer.num==1000)){
+        while ((buffer.num<1000)){
             try {
                 cocinar();
                 try {
