@@ -10,7 +10,7 @@ public class Log implements Runnable {
     private Buffer buffer;
     private Thread[] consumerThread;
     int cantidad;
-    String filepath = "log.txt";
+    String filepath = "log.csv";
     //private Date date;
     //java.util.Date test_date=new Date();
     private int segundos=0;
