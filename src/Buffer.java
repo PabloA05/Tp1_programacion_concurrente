@@ -1,4 +1,4 @@
-import java.util.concurrent.Semaphore;
+
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -7,42 +7,46 @@ public class Buffer {
 
 
     public int num;
-    //private ReentrantLock lockQueue;
-    private Condition call;
-
-    private ReentrantLock prodLock;
-    private ReentrantLock consLock;
-
+    private ReentrantLock lockQueue;
+    public Condition call;
+    /*    private ReentrantLock prodLock;
+        private ReentrantLock consLock;
+        private final Semaphore cenaforo = new Semaphore(1, true); //el semaforo es el unico que permite la edicion de la lista*/
     final int capacity = 25;
     private boolean vacio;
-    private final Semaphore cenaforo = new Semaphore(1, true); //el semaforo es el unico que permite la edicion de la lista
+
     public LinkedBlockingQueue<Integer> store_queue = new LinkedBlockingQueue<Integer>(capacity);
 
 
     public Buffer(boolean fairMode) {
-        //lockQueue = new ReentrantLock(fairMode);
-        //call = lockQueue.newCondition();
-        vacio = false;
-        prodLock = new ReentrantLock(fairMode);
-        consLock = new ReentrantLock(fairMode);
+        lockQueue = new ReentrantLock(fairMode);
+        call = lockQueue.newCondition();
+
     }
 
-    /*private void remove_fromStore() {
-       store_queue.remove();
-    }*/
     private void set(int productores_list) {
+        if (num == 1000) {
+            lockQueue.unlock();
+            return;
+        }
+
         try {
+
             store_queue.offer(productores_list);
+            System.out.printf("Tamano de la lista en store:%s\n", store_queue.size());
+            System.out.println(Thread.currentThread().getName() + " entro a reposition, con el numero: " + productores_list);
+            System.out.println();
         } catch (NullPointerException e) {
-            System.out.println(Thread.currentThread().getName()+"No se cargo nada en reposition");
-        } finally {
-            notifyAll();
-            cenaforo.release();
+            System.out.println(Thread.currentThread().getName() + "No se cargo nada en reposition");
+
         }
     }
 
 
     public void reposition(int productores_list) throws LimiteException {
+        if (num == 1000) return;
+
+        lockQueue.lock();
        /* lockQueue.lock();
 
         if (store_queue.peek() == null) {
@@ -69,34 +73,101 @@ public class Buffer {
             }
         }*/
 
-        prodLock.lock();
-        if (store_queue.size() >= capacity) {// Aca se limita la entrada al resto del metodo es suporfluo en realidad, sin esto igual no carga la lista
-            prodLock.unlock();                 // Se hizo asi por si se queria que siga produciendo si el lock estaba ocupado, pero no se implemento porque no se pide explicitamente en el tp.
-            throw new LimiteException(false);   // No llega a tocar store_queue y elimana todos los elementos de la list de produccion
-        } else if (store_queue.isEmpty()) {
-            cenaforo.acquireUninterruptibly();
-            set(productores_list);
-            prodLock.unlock();
+        if (num == 1000) {
+            lockQueue.unlock();
+            return;
+        }
+        if (store_queue.size() >= capacity) {
+            /*Aca se limita la entrada al resto del metodo es suporfluo en realidad, ya que no se carga la lista si esta llena
+            Se hizo asi por si se queria que siga produciendo si el lock estaba ocupado, pero no se implemento porque no se pide explicitamente en el tp.
+            No llega a tocar store_queue y elimana todos los elementos de la list de produccion*/
+            lockQueue.unlock();
+            throw new LimiteException(false);
         } else {
             try {
-                cenaforo.acquire();
+
                 set(productores_list);
-            } catch (InterruptedException e) {
-                System.out.println(Thread.currentThread().getName() + " No lo pude adquirir en repostion");
+                if (num == 1000) {
+                    lockQueue.unlock();
+                    return;
+                }
+                /*if(!store_queue.isEmpty()){
+                    System.out.println("entro en is.enoty "+store_queue.isEmpty());
+                    System.out.println("esperado false");
+                }*/
+            } catch (NullPointerException e) {
+                System.out.println(Thread.currentThread().getName() + "*** No lo pude adquirir en repostion ***");
                 e.printStackTrace();
             } finally {
-                prodLock.unlock();
+                call.signalAll();
+                lockQueue.unlock();
             }
         }
     }
 
     private void get() {
-
-        cenaforo.release();
+        if (num == 1000) {
+            lockQueue.unlock();
+            return;
+        } else {
+            try {
+                if (store_queue.isEmpty() && (num == 1000 || num == 0)) {
+                    System.out.println("vacio, No tendria que pasar ");
+                } else {
+                    System.out.println(Thread.currentThread().getName() + " entro a consume, con el numero: " + store_queue.peek());
+                    System.out.println("vacia? " + store_queue.isEmpty());
+                    Thread.sleep(store_queue.poll());
+                    num++;
+                    System.out.println("Cantidad " + num);
+                }
+            } catch (InterruptedException e) {
+                System.out.println(Thread.currentThread().getName() + " *** valor nulo en lista, muy malo ***");
+                e.printStackTrace();
+            } finally {
+                call.signalAll();
+            }
+        }
     }
 
     public void consume() {
-       /* lockQueue.lock();
+        lockQueue.lock();
+        if (num == 1000) {
+            lockQueue.unlock();
+            return;
+        }
+        try {
+            // System.out.println("entro algo");
+            while (store_queue.isEmpty() && num != 1000) {
+                try {
+                    if (num == 1000) {
+                        continue;
+                    } else call.await();
+                } catch (InterruptedException e) {
+                    System.out.println("*** pasa algo que el wait, help ***");
+                    e.printStackTrace();
+                }
+            }
+            try {
+                get();
+            } catch (NullPointerException e) {
+                System.out.println("*** problemas con el acquiere de consume");
+                e.printStackTrace();
+            }
+        } finally {
+
+
+            try {
+                lockQueue.unlock();
+                //System.out.println("ACA************** "+lockQueue.getQueueLength());
+            } catch (IllegalMonitorStateException e){
+                //System.out.println("no lo entiendo este error"); // para verlo sacar el try y catch, creo que es porque hago lockQueue.unlock(); cuando no hay nada lockeado
+               // e.printStackTrace();
+            }
+        }
+    }
+}
+
+ /* lockQueue.lock();
         boolean vacio = false;
         try {
             while (store_queue.peek() == null) { // en 3 prod y 5 consumidores, entra con la lista vacia
@@ -165,11 +236,3 @@ public class Buffer {
             System.out.println("lista vacia, Mal!, entro al catch de consume()");
             throw new NullPointerException();
         }*/
-        //consLock.lock();
-
-
-
-    }
-
-
-}

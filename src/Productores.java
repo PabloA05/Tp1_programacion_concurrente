@@ -20,9 +20,11 @@ public class Productores implements Runnable {
     }
 
     private void cocinar() throws InterruptedException {
-        int rand = ThreadLocalRandom.current().nextInt(1, 200 + 1);
+        if(buffer.num==1000)return;
+
+        int rand = ThreadLocalRandom.current().nextInt(1, 150 + 1);
         this.producto_add(new Producto(rand));
-        Thread.sleep(rand);
+        Thread.sleep(rand); //aca duerme
         if (Thread.interrupted()) {
             throw new InterruptedException();
         }
@@ -34,8 +36,10 @@ public class Productores implements Runnable {
         while ((buffer.num<1000)){
             try {
                 cocinar();
+                if(buffer.num==1000)break;
                 try {
                     buffer.reposition(head_list_products().get_product()); //Le estoy pasando un numero
+                    if(buffer.num==1000)break;
                     list_products.remove(); //Lo hice asi porque podria hacer que los productores sigan produciendo
                 } catch (LimiteException e) {
                     list_products.clear();
@@ -44,6 +48,9 @@ public class Productores implements Runnable {
             } catch (InterruptedException e) {
                 System.out.println("Paso algo muy malo en el run() de Productores");
             }
+
         }
+        System.out.println(Thread.currentThread().getName()+" TERMINO");
+
     }
 }

@@ -10,16 +10,17 @@ public class Log implements Runnable {
     private Buffer buffer;
     private Thread[] consumerThread;
     int cantidad;
-    String filepath = "log.csv";
-    private Date date;
-    java.util.Date test_date=new Date();
+    String filepath = "log.txt";
+    //private Date date;
+    //java.util.Date test_date=new Date();
+    private int segundos=0;
 
 
-    public Log(Buffer buffer, Thread[] consumerThread, int cantidad_consumidores) {
+    public Log(Buffer buffer, Thread consumerThread[], int cantidad_consumidores) {
         this.buffer = buffer;
         this.consumerThread = consumerThread;
         cantidad = cantidad_consumidores;
-        date=new Date();
+        //date=new Date();
 
     }
 
@@ -36,7 +37,7 @@ public class Log implements Runnable {
             BufferedWriter bw = new BufferedWriter(fw);
             PrintWriter pw = new PrintWriter(bw);
 
-            pw.printf("\"Fecha\"" + "," + "\"Buffer\"");
+            pw.printf("\"Segundos\"" + "," + "\"Buffer\"");
             for (int i = 0; i < cantidad; i++) {
                 pw.printf("," + '"' + consumerThread[i].getName() + '"');
             }
@@ -48,8 +49,9 @@ public class Log implements Runnable {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
+                segundos+=2;
 
-                pw.printf(test_date + "," + buffer.store_queue.size());
+                pw.printf(segundos + "," + buffer.store_queue.size());
                 for (int i = 0; i < cantidad; i++) {
 
                     pw.printf("," + consumerThread[i].getState());
@@ -63,9 +65,12 @@ public class Log implements Runnable {
             pw.close();
             JOptionPane.showMessageDialog(null, "Guardado");
 
+
         } catch (
                 IOException e) {
             JOptionPane.showMessageDialog(null, "No guardado");
+        }finally {
+            Thread.interrupted(); //no llega aca
         }
     }
 }
