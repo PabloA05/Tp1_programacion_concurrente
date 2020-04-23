@@ -91,6 +91,7 @@ fabric.properties
 .idea/**/markdown-navigator/
 
 #log
+log.txt
 log.csv
 .~lock.log.csv#
 
