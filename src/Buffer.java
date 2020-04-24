@@ -126,7 +126,7 @@ public class Buffer {
             } catch (IllegalMonitorStateException e) {
                 System.out.println("***** no lo entiendo este error ****"); // para verlo sacar el try y catch, creo que es porque hago lockQueue.unlock(); cuando no hay nada lockeado
                 // e.printStackTrace();
-            }//ARREGLADO
+            }//ARREGLADO sin problemas
         }
     }
 }
