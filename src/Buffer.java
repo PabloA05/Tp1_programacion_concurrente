@@ -1,4 +1,3 @@
-
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -10,7 +9,6 @@ public class Buffer {
     private ReentrantLock lockQueue;
     public Condition call;
     final int capacity = 25;
-    private boolean vacio;
 
     public LinkedBlockingQueue<Integer> store_queue = new LinkedBlockingQueue<Integer>(capacity);
 
@@ -18,7 +16,6 @@ public class Buffer {
     public Buffer(boolean fairMode) {
         lockQueue = new ReentrantLock(fairMode);
         call = lockQueue.newCondition();
-
     }
 
     private void set(int productores_list) {
@@ -26,16 +23,13 @@ public class Buffer {
             lockQueue.unlock();
             return;
         }
-
         try {
-
             store_queue.offer(productores_list);
             System.out.printf("Tamano de la lista en store:%s\n", store_queue.size());
             System.out.println(Thread.currentThread().getName() + " entro a reposition, con el numero: " + productores_list);
             System.out.println();
         } catch (NullPointerException e) {
             System.out.println(Thread.currentThread().getName() + "No se cargo nada en reposition");
-
         }
     }
 
@@ -57,7 +51,6 @@ public class Buffer {
             throw new LimiteException(false);
         } else {
             try {
-
                 set(productores_list);
                 if (num == 1000) {
                     lockQueue.unlock();
@@ -74,11 +67,9 @@ public class Buffer {
         }
     }
 
-    private void get() {
-        if (num == 1000) {
-            //lockQueue.unlock();
-            return;
-        } else {
+    private void get(boolean consumiendo) {
+        if (num == 1000) return;
+        else {
             try {
                 if (store_queue.isEmpty() && (num == 1000 || num == 0)) {
                     System.out.println("vacio, No tendria que pasar ");
@@ -98,33 +89,30 @@ public class Buffer {
         }
     }
 
-    public void consume() {
+    public void consume(boolean consumiendo) {
         lockQueue.lock();
         if (num == 1000) {
             lockQueue.unlock();
             return;
         }
         try {
-            // System.out.println("entro algo");
             while (store_queue.isEmpty() && num != 1000) {
                 try {
-                    if (num == 1000) {
+                    /*if (num == 1000) {
                         continue;
-                    } else call.await();
+                    } else */call.await();
                 } catch (InterruptedException e) {
                     System.out.println("*** pasa algo que el wait, help ***");
                     e.printStackTrace();
                 }
             }
             try {
-                get();
+                get(consumiendo);
             } catch (NullPointerException e) {
                 System.out.println("*** problemas con el acquiere de consume");
                 e.printStackTrace();
             }
         } finally {
-
-
             try {
                /* System.out.println("nombre " + Thread.currentThread().getName());
                 System.out.println("getWaitQueueLength() "+ lockQueue.getWaitQueueLength(call));
@@ -134,8 +122,6 @@ public class Buffer {
                 System.out.println("isHeldByCurrentThread() "+lockQueue.isHeldByCurrentThread());
                 System.out.println();*/
                 lockQueue.unlock();
-
-                //System.out.println("ACA************** "+lockQueue.getQueueLength());
             } catch (IllegalMonitorStateException e) {
                 System.out.println("no lo entiendo este error"); // para verlo sacar el try y catch, creo que es porque hago lockQueue.unlock(); cuando no hay nada lockeado
                 // e.printStackTrace();

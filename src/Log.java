@@ -9,27 +9,25 @@ public class Log implements Runnable {
 
     private Buffer buffer;
     private Thread[] consumerThread;
-    int cantidad;
+    private String threadState;
+    private int cantidad;
     String filepath = "log.csv";
     //private Date date;
     //java.util.Date test_date=new Date();
-    private int segundos=0;
+    private int segundos = 0;
 
 
-    public Log(Buffer buffer, Thread consumerThread[], int cantidad_consumidores) {
+    public Log(Buffer buffer, Thread[] consumerThread, int cantidad_consumidores) {
         this.buffer = buffer;
         this.consumerThread = consumerThread;
         cantidad = cantidad_consumidores;
         //date=new Date();
-
     }
-
-    private static ThreadLocal<Date> starDate = new ThreadLocal<Date>() { //no anda
+  /*  private static ThreadLocal<Date> starDate = new ThreadLocal<Date>() { //no anda
         protected Date InitialValue() {
             return new Date();
         }
-    };
-
+    };*/
     @Override
     public void run() {
         try {
@@ -39,7 +37,8 @@ public class Log implements Runnable {
 
             pw.printf("\"Segundos\"" + "," + "\"Buffer\"");
             for (int i = 0; i < cantidad; i++) {
-                pw.printf("," + '"' + consumerThread[i].getName() + '"');
+
+                pw.printf("," + '"' + consumerThread[i].getClass() + '"');
             }
             pw.println();
 
@@ -49,12 +48,18 @@ public class Log implements Runnable {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                segundos+=2;
+                segundos += 2;
 
                 pw.printf(segundos + "," + buffer.store_queue.size());
                 for (int i = 0; i < cantidad; i++) {
-
-                    pw.printf("," + consumerThread[i].getState());
+                    threadState = consumerThread[i].getState().toString();
+                    // pw.printf(","+consumerThread[i].getState());
+                    if (threadState.equals("TIMED_WAITING")) {
+                        //pw.printf("," + "Ocupado Consumiendo");
+                        pw.printf("," + "Consumiendo");
+                    } else{
+                        pw.printf("," + "Disponible");
+                    }
                 }
                 pw.println();
                 pw.flush();
@@ -64,15 +69,12 @@ public class Log implements Runnable {
             }
             pw.close();
             //JOptionPane.showMessageDialog(null, "Guardado");
-
-
         } catch (
                 IOException e) {
             e.printStackTrace();
             //JOptionPane.showMessageDialog(null, "No guardado");
-        }finally {
+        } finally {
             Thread.interrupted(); //no llega aca
         }
-
     }
 }

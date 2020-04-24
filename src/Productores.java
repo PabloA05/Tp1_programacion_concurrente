@@ -10,7 +10,6 @@ public class Productores implements Runnable {
         this.buffer = buffer;
     }
 
-
     private void producto_add(Producto producto) {
         list_products.add(producto);
     }
@@ -20,9 +19,9 @@ public class Productores implements Runnable {
     }
 
     private void cocinar() throws InterruptedException {
-        if(buffer.num==1000)return;
+        if (buffer.num == 1000) return;
 
-        int rand = ThreadLocalRandom.current().nextInt(1, 150 + 1);
+        int rand = ThreadLocalRandom.current().nextInt(1, 200 + 1);
         this.producto_add(new Producto(rand));
         Thread.sleep(rand); //aca duerme
         if (Thread.interrupted()) {
@@ -33,14 +32,14 @@ public class Productores implements Runnable {
     @Override
     public void run() {
 
-        while ((buffer.num<1000)){
+        while ((buffer.num < 1000)) {
             try {
                 cocinar();
-                if(buffer.num==1000)break;
+                if (buffer.num == 1000) break;
                 try {
                     buffer.reposition(head_list_products().get_product()); //Le estoy pasando un numero
-                    if(buffer.num==1000)break;
-                    list_products.remove(); //Lo hice asi porque podria hacer que los productores sigan produciendo
+                    if (buffer.num == 1000) break;
+                    list_products.remove(); //Lo hice asi porque podria hacer que los productores sigan produciendo pero no lo pide el tp asi que no lo inclui
                 } catch (LimiteException e) {
                     list_products.clear();
                     System.out.println("Se elimino todo de: " + Thread.currentThread().getName());
@@ -50,7 +49,7 @@ public class Productores implements Runnable {
             }
 
         }
-        System.out.println(Thread.currentThread().getName()+" TERMINO");
+        System.out.println(Thread.currentThread().getName() + " TERMINO");
         Thread.currentThread().interrupt();
 
     }

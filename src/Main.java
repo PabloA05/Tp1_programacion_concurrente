@@ -2,7 +2,7 @@ public class Main {
     public static void main(String[] args) {
 
         boolean fairMode = true;
-        int productores_cantidad=10;
+        int productores_cantidad=5;
         int consumideres_cantidad=10;
 
         Buffer buffer = new Buffer(fairMode);
@@ -15,14 +15,13 @@ public class Main {
         for (int i = 0; i < consumideres_cantidad; i++) {
             consumidores[i] = new Thread(new Consumidores(buffer),"consumidores_"+i);
         }
+        Thread log=new Thread(new Log(buffer,consumidores,consumideres_cantidad),"LOG");
+        log.start();
         for (int i = 0; i < productores_cantidad; i++) {
             productores[i].start();
         }
         for (int i = 0; i < consumideres_cantidad; i++) {
             consumidores[i].start();
         }
-        Thread log=new Thread(new Log(buffer,consumidores,consumideres_cantidad),"LOG");
-        log.start();
-
     }
 }
