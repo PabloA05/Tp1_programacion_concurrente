@@ -2,8 +2,8 @@ public class Main {
     public static void main(String[] args) {
 
         boolean fairMode = true;
-        int productores_cantidad=10;
-        int consumideres_cantidad=30;
+        int productores_cantidad=20;
+        int consumideres_cantidad=40;
 
         Buffer buffer = new Buffer(fairMode);
 

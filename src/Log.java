@@ -63,14 +63,16 @@ public class Log implements Runnable {
                 }
             }
             pw.close();
-            JOptionPane.showMessageDialog(null, "Guardado");
+            //JOptionPane.showMessageDialog(null, "Guardado");
 
 
         } catch (
                 IOException e) {
-            JOptionPane.showMessageDialog(null, "No guardado");
+            e.printStackTrace();
+            //JOptionPane.showMessageDialog(null, "No guardado");
         }finally {
             Thread.interrupted(); //no llega aca
         }
+
     }
 }

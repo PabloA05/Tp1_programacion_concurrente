@@ -51,6 +51,7 @@ public class Productores implements Runnable {
 
         }
         System.out.println(Thread.currentThread().getName()+" TERMINO");
+        Thread.currentThread().interrupt();
 
     }
 }
