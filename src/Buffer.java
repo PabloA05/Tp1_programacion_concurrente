@@ -9,9 +9,6 @@ public class Buffer {
     public int num;
     private ReentrantLock lockQueue;
     public Condition call;
-    /*    private ReentrantLock prodLock;
-        private ReentrantLock consLock;
-        private final Semaphore cenaforo = new Semaphore(1, true); //el semaforo es el unico que permite la edicion de la lista*/
     final int capacity = 25;
     private boolean vacio;
 
@@ -45,30 +42,28 @@ public class Buffer {
 
     public void reposition(int productores_list) throws LimiteException {
         if (num == 1000) return;
-        if (store_queue.size() >= capacity) {
-            /*Aca se limita la entrada al resto del metodo es suporfluo en realidad, ya que no se carga la lista si esta llena
-            Se hizo asi por si se queria que siga produciendo si el lock estaba ocupado, pero no se implemento porque no se pide explicitamente en el tp.
-            No llega a tocar store_queue y elimana todos los elementos de la list de produccion*/
-            throw new LimiteException(false);
-        }
 
         lockQueue.lock();
-
 
         if (num == 1000) {
             lockQueue.unlock();
             return;
+        }
+        if (store_queue.size() >= capacity) {
+            /*Aca se limita la entrada al resto del metodo es suporfluo en realidad, ya que no se carga la lista si esta llena
+            Se hizo asi por si se queria que siga produciendo si el lock estaba ocupado, pero no se implemento porque no se pide explicitamente en el tp.
+            No llega a tocar store_queue y elimana todos los elementos de la list de produccion*/
+            lockQueue.unlock();
+            throw new LimiteException(false);
         } else {
             try {
+
                 set(productores_list);
                 if (num == 1000) {
                     lockQueue.unlock();
                     return;
                 }
-                /*if(!store_queue.isEmpty()){
-                    System.out.println("entro en is.enoty "+store_queue.isEmpty());
-                    System.out.println("esperado false");
-                }*/
+
             } catch (NullPointerException e) {
                 System.out.println(Thread.currentThread().getName() + "*** No lo pude adquirir en repostion ***");
                 e.printStackTrace();
@@ -81,7 +76,7 @@ public class Buffer {
 
     private void get() {
         if (num == 1000) {
-            lockQueue.unlock();
+            //lockQueue.unlock();
             return;
         } else {
             try {
@@ -131,6 +126,13 @@ public class Buffer {
 
 
             try {
+               /* System.out.println("nombre " + Thread.currentThread().getName());
+                System.out.println("getWaitQueueLength() "+ lockQueue.getWaitQueueLength(call));
+                System.out.println("getQueueLength() " + lockQueue.getQueueLength());
+                System.out.println(" \thasQueuedThreads() "+lockQueue.hasQueuedThreads());
+                System.out.println("hasWaiters "+lockQueue.hasWaiters(call));
+                System.out.println("isHeldByCurrentThread() "+lockQueue.isHeldByCurrentThread());
+                System.out.println();*/
                 lockQueue.unlock();
 
                 //System.out.println("ACA************** "+lockQueue.getQueueLength());
