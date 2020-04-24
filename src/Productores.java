@@ -47,10 +47,8 @@ public class Productores implements Runnable {
             } catch (InterruptedException e) {
                 System.out.println("Paso algo muy malo en el run() de Productores");
             }
-
         }
         System.out.println(Thread.currentThread().getName() + " TERMINO");
         Thread.currentThread().interrupt();
-
     }
 }

@@ -74,6 +74,7 @@ public class Log implements Runnable {
             e.printStackTrace();
             //JOptionPane.showMessageDialog(null, "No guardado");
         } finally {
+            System.out.println("LOG en la carpeta.");
             Thread.interrupted(); //no llega aca
         }
     }

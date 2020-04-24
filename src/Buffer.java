@@ -67,7 +67,7 @@ public class Buffer {
         }
     }
 
-    private void get(boolean consumiendo) {
+    private void get() {
         if (num == 1000) return;
         else {
             try {
@@ -75,10 +75,10 @@ public class Buffer {
                     System.out.println("vacio, No tendria que pasar ");
                 } else {
                     System.out.println(Thread.currentThread().getName() + " entro a consume, con el numero: " + store_queue.peek());
-                    System.out.println("vacia? " + store_queue.isEmpty());
+                    System.out.println("Lista vacia?: " + store_queue.isEmpty());
                     Thread.sleep(store_queue.poll());
                     num++;
-                    System.out.println("Cantidad " + num);
+                    System.out.println("Cantidad consumida " + num);
                 }
             } catch (InterruptedException e) {
                 System.out.println(Thread.currentThread().getName() + " *** valor nulo en lista, muy malo ***");
@@ -89,7 +89,7 @@ public class Buffer {
         }
     }
 
-    public void consume(boolean consumiendo) {
+    public void consume() {
         lockQueue.lock();
         if (num == 1000) {
             lockQueue.unlock();
@@ -100,14 +100,15 @@ public class Buffer {
                 try {
                     /*if (num == 1000) {
                         continue;
-                    } else */call.await();
+                    } else */
+                    call.await();
                 } catch (InterruptedException e) {
                     System.out.println("*** pasa algo que el wait, help ***");
                     e.printStackTrace();
                 }
             }
             try {
-                get(consumiendo);
+                get();
             } catch (NullPointerException e) {
                 System.out.println("*** problemas con el acquiere de consume");
                 e.printStackTrace();
@@ -123,9 +124,9 @@ public class Buffer {
                 System.out.println();*/
                 lockQueue.unlock();
             } catch (IllegalMonitorStateException e) {
-                System.out.println("no lo entiendo este error"); // para verlo sacar el try y catch, creo que es porque hago lockQueue.unlock(); cuando no hay nada lockeado
+                System.out.println("***** no lo entiendo este error ****"); // para verlo sacar el try y catch, creo que es porque hago lockQueue.unlock(); cuando no hay nada lockeado
                 // e.printStackTrace();
-            }
+            }//ARREGLADO
         }
     }
 }

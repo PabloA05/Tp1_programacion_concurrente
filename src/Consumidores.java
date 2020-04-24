@@ -1,6 +1,5 @@
 public class Consumidores implements Runnable {
     private Buffer buffer;
-    private Boolean consumiendo=false;
 
     public Consumidores(Buffer buffer) {
         this.buffer = buffer;
@@ -15,7 +14,7 @@ public class Consumidores implements Runnable {
                     System.out.printf("Llego a %s",buffer.num);
                     break;
                 }
-                buffer.consume(consumiendo);
+                buffer.consume();
                 if (buffer.num==1000){
                     //System.out.printf("Llego a %s",buffer.num);
                     //buffer.call.signalAll();

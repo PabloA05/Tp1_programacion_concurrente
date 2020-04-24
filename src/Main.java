@@ -9,11 +9,11 @@ public class Main {
 
         Thread[] productores = new Thread[productores_cantidad];
         for (int i = 0; i < productores_cantidad; i++) {
-            productores[i] = new Thread(new Productores(buffer), "productores_"+ i);
+            productores[i] = new Thread(new Productores(buffer), "Productores_"+ i);
         }
         Thread[] consumidores = new Thread[consumideres_cantidad];
         for (int i = 0; i < consumideres_cantidad; i++) {
-            consumidores[i] = new Thread(new Consumidores(buffer),"consumidores_"+i);
+            consumidores[i] = new Thread(new Consumidores(buffer),"Consumidores_"+i);
         }
         Thread log=new Thread(new Log(buffer,consumidores,consumideres_cantidad),"LOG");
         log.start();
