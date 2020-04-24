@@ -38,7 +38,7 @@ public class Log implements Runnable {
             pw.printf("\"Segundos\"" + "," + "\"Buffer\"");
             for (int i = 0; i < cantidad; i++) {
 
-                pw.printf("," + '"' + consumerThread[i].getClass() + '"');
+                pw.printf("," + '"' + consumerThread[i].getName() + '"');
             }
             pw.println();
 
