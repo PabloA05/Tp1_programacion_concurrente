@@ -8,14 +8,10 @@ public class Consumidores implements Runnable {
 
     @Override
     public void run() {
-       while ((buffer.num<1000)){
+        while ((buffer.num < 1000)) {
             try {
-                if (buffer.num==1000){
-                    System.out.printf("Llego a %s",buffer.num);
-                    break;
-                }
                 buffer.consume();
-                if (buffer.num==1000){
+                if (buffer.num == 1000) {
                     //System.out.printf("Llego a %s",buffer.num);
                     //buffer.call.signalAll();
                     break;
@@ -25,6 +21,6 @@ public class Consumidores implements Runnable {
                 e.printStackTrace();
             }
         }
-        System.out.println(Thread.currentThread().getName()+" TERMINO");
+        System.out.println(Thread.currentThread().getName() + " TERMINO");
     }
 }
