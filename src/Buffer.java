@@ -1,3 +1,4 @@
+import java.util.LinkedList;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -10,7 +11,8 @@ public class Buffer {
     public Condition call;
     final int capacity = 25;
 
-    public LinkedBlockingQueue<Integer> store_queue = new LinkedBlockingQueue<Integer>(capacity);
+    public LinkedList<Integer> store_queue = new LinkedList<Integer>();
+    //public LinkedBlockingQueue<Integer> store_queue = new LinkedBlockingQueue<Integer>(capacity);
 
 
     public Buffer(boolean fairMode) {
@@ -24,7 +26,8 @@ public class Buffer {
             return;
         }
         try {
-            store_queue.offer(productores_list);
+            //store_queue.offer(productores_list);
+            store_queue.add(productores_list);
             System.out.printf("Tamano de la lista en store:%s\n", store_queue.size());
             System.out.println(Thread.currentThread().getName() + " entro a reposition, con el numero: " + productores_list);
             System.out.println();
