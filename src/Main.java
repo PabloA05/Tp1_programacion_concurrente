@@ -1,7 +1,7 @@
 public class Main {
     public static void main(String[] args) {
 
-        boolean fairMode = false;
+        boolean fairMode = true;
         int productores_cantidad=3;
         int consumideres_cantidad=2;
 
