@@ -3,18 +3,18 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class Productores implements Runnable {
     private Buffer buffer;
-    private LinkedList<Producto> list_products = new LinkedList<>();
+    private LinkedList<Integer> list_products = new LinkedList<>();
 
 
     public Productores(Buffer buffer) {
         this.buffer = buffer;
     }
 
-    private void producto_add(Producto producto) {
+    private void producto_add(Integer producto) {
         list_products.add(producto);
     }
 
-    public Producto head_list_products() {
+    public Integer head_list_products() {
         return list_products.getFirst();
     }
 
@@ -22,7 +22,7 @@ public class Productores implements Runnable {
         if (buffer.num == 1000) return;
 
         int rand = ThreadLocalRandom.current().nextInt(1, 200 + 1);
-        this.producto_add(new Producto(rand));
+        this.producto_add(rand);
         Thread.sleep(rand); //aca duerme
         if (Thread.interrupted()) {
             throw new InterruptedException();
@@ -37,7 +37,7 @@ public class Productores implements Runnable {
                 cocinar();
                 if (buffer.num == 1000) break;
                 try {
-                    buffer.reposition(head_list_products().get_product()); //Le estoy pasando un numero
+                    buffer.reposition(head_list_products()); //Le estoy pasando un numero
                     if (buffer.num == 1000) break;
                     list_products.remove(); //Lo hice asi porque podria hacer que los productores sigan produciendo pero no lo pide el tp asi que no lo inclui
                 } catch (LimiteException e) {
