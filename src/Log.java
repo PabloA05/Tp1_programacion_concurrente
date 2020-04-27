@@ -48,7 +48,7 @@ public class Log implements Runnable {
                 }
                 segundos+=2;
                 System.out.println("El buffer posee:" + buffer.store_queue.size()+" elementos.");
-                for (int i = 0;i<2;i++){
+                for (int i = 0;i<cantidad;i++){
                     System.out.println("El estado de "+ consumerThread[i].getName() + " es " + consumerThread[i].getState() + "\n");
                 }
 
@@ -67,7 +67,7 @@ public class Log implements Runnable {
             System.out.println("Ejecución Finalizada");
             System.out.println(buffer.num);
             System.out.println("El buffer posee: "+ buffer.store_queue.size()+ " elementos.");
-            for (int i = 0;i<2;i++){
+            for (int i = 0;i<cantidad;i++){
                 System.out.println("El estado de "+ consumerThread[i].getName() + " es " + consumerThread[i].getState());
             }
             System.out.println("\n");
