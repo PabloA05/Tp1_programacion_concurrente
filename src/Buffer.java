@@ -21,10 +21,7 @@ public class Buffer {
     }
 
     private void set(int productores_list) {
-        if (num == 1000) {
-            lockQueue.unlock();
-            return;
-        }
+
         try {
             //store_queue.offer(productores_list);
             store_queue.add(productores_list);
@@ -38,8 +35,6 @@ public class Buffer {
 
 
     public void reposition(int productores_list) throws LimiteException {
-        if (num == 1000) return;
-
         lockQueue.lock();
 
         if (num == 1000) {
@@ -55,11 +50,6 @@ public class Buffer {
         } else {
             try {
                 set(productores_list);
-                if (num == 1000) {
-                    lockQueue.unlock();
-                    return;
-                }
-
             } catch (NullPointerException e) {
                 System.out.println(Thread.currentThread().getName() + "*** No lo pude adquirir en repostion ***");
                 e.printStackTrace();
@@ -71,24 +61,22 @@ public class Buffer {
     }
 
     private void get() {
-        if (num == 1000) return;
-        else {
-            try {
-                if (store_queue.isEmpty() && (num == 1000 || num == 0)) {
-                    System.out.println("vacio, No tendria que pasar ");
-                } else {
-                    System.out.println(Thread.currentThread().getName() + " entro a consume, con el numero: " + store_queue.peek());
-                    System.out.println("Lista vacia?: " + store_queue.isEmpty());
-                    Thread.sleep(store_queue.poll());
-                    num++;
-                    System.out.println("Cantidad consumida " + num);
-                }
-            } catch (InterruptedException e) {
-                System.out.println(Thread.currentThread().getName() + " *** valor nulo en lista, muy malo ***");
-                e.printStackTrace();
-            } finally {
-                call.signalAll();
+
+        try {
+            if (store_queue.isEmpty() && (num == 1000 || num == 0)) {
+                System.out.println("vacio, No tendria que pasar ");
+            } else {
+                System.out.println(Thread.currentThread().getName() + " entro a consume, con el numero: " + store_queue.peek());
+                System.out.println("Lista vacia?: " + store_queue.isEmpty());
+                Thread.sleep(store_queue.poll());
+                num++;
+                System.out.println("Cantidad consumida " + num);
             }
+        } catch (InterruptedException e) {
+            System.out.println(Thread.currentThread().getName() + " *** valor nulo en lista, muy malo ***");
+            e.printStackTrace();
+        } finally {
+            call.signalAll();
         }
     }
 
@@ -101,9 +89,6 @@ public class Buffer {
         try {
             while (store_queue.isEmpty() && num != 1000) {
                 try {
-                    /*if (num == 1000) {
-                        continue;
-                    } else */
                     call.await();
                 } catch (InterruptedException e) {
                     System.out.println("*** pasa algo que el wait, help ***");
