@@ -1,7 +1,6 @@
 import java.util.LinkedList;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
-import java.util.concurrent.LinkedBlockingQueue;
 
 public class Buffer {
 
@@ -46,7 +45,7 @@ public class Buffer {
             Se hizo asi por si se queria que siga produciendo si el lock estaba ocupado, pero no se implemento porque no se pide explicitamente en el tp.
             No llega a tocar store_queue y elimana todos los elementos de la list de produccion*/
             lockQueue.unlock();
-            throw new LimiteException(false);
+            throw new LimiteException(true);
         } else {
             try {
                 set(productores_list);
@@ -60,61 +59,58 @@ public class Buffer {
         }
     }
 
-    private void get() {
+    private int get() {
 
-        try {
-            if (store_queue.isEmpty() && (num == 1000 || num == 0)) {
-                System.out.println("vacio, No tendria que pasar ");
-            } else {
-                System.out.println(Thread.currentThread().getName() + " entro a consume, con el numero: " + store_queue.peek());
-                System.out.println("Lista vacia?: " + store_queue.isEmpty());
-                Thread.sleep(store_queue.poll());
-                num++;
-                System.out.println("Cantidad consumida " + num);
-            }
-        } catch (InterruptedException e) {
-            System.out.println(Thread.currentThread().getName() + " *** valor nulo en lista, muy malo ***");
-            e.printStackTrace();
-        } finally {
-            call.signalAll();
+        if (store_queue.isEmpty() && (num == 1000 || num == 0)) {
+            System.out.println("vacio, No tendria que pasar ");
+            return 0;
+        } else {
+            System.out.println(Thread.currentThread().getName() + " entro a consume, con el numero: " + store_queue.peek());
+            System.out.println("Lista vacia?: " + store_queue.isEmpty());
+
+            num++;
+            System.out.println("Cantidad consumida " + num);
+            return (store_queue.poll());
+
         }
     }
 
-    public void consume() {
+    public int consume() {
+
         lockQueue.lock();
         if (num == 1000) {
-            lockQueue.unlock();
-            return;
+
+            return 0;
         }
-        try {
-            while (store_queue.isEmpty() && num != 1000) {
-                try {
-                    call.await();
-                } catch (InterruptedException e) {
-                    System.out.println("*** pasa algo que el wait, help ***");
-                    e.printStackTrace();
-                }
-            }
+        while (store_queue.isEmpty() && num != 1000) {
             try {
-                get();
-            } catch (NullPointerException e) {
-                System.out.println("*** problemas con el acquiere de consume");
+                call.await();
+            } catch (InterruptedException e) {
+                System.out.println("*** pasa algo que el wait, help ***");
                 e.printStackTrace();
             }
+        }
+        try {
+            return get();
         } finally {
-            try {
-               /* System.out.println("nombre " + Thread.currentThread().getName());
-                System.out.println("getWaitQueueLength() "+ lockQueue.getWaitQueueLength(call));
-                System.out.println("getQueueLength() " + lockQueue.getQueueLength());
-                System.out.println(" \thasQueuedThreads() "+lockQueue.hasQueuedThreads());
-                System.out.println("hasWaiters "+lockQueue.hasWaiters(call));
-                System.out.println("isHeldByCurrentThread() "+lockQueue.isHeldByCurrentThread());
-                System.out.println();*/
-                lockQueue.unlock();
-            } catch (IllegalMonitorStateException e) {
-                System.out.println("***** no lo entiendo este error ****"); // para verlo sacar el try y catch, creo que es porque hago lockQueue.unlock(); cuando no hay nada lockeado
-                // e.printStackTrace();
-            }//ARREGLADO sin problemas
+            lockQueue.unlock();
         }
     }
 }
+   /* public int consume() {
+        if (num == 1000) return 0;
+
+        lockQueue.lock();
+        while (store_queue.isEmpty() && num != 1000) {
+            try {
+                call.await();
+            } catch (InterruptedException e) {
+                System.out.println("*** pasa algo que el wait, help ***");
+                e.printStackTrace();
+            }
+        }
+        System.out.println("cantadidad" + num);
+        num++;
+        lockQueue.unlock();
+        return store_queue.poll();
+    }*/
