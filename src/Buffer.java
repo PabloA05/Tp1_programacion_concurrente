@@ -79,8 +79,9 @@ public class Buffer {
 
         lockQueue.lock();
         if (num == 1000) {
-
+            lockQueue.unlock();
             return 0;
+
         }
         while (store_queue.isEmpty() && num != 1000) {
             try {
