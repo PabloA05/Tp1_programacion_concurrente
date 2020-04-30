@@ -21,7 +21,8 @@ public class Productores implements Runnable {
     private void cocinar() throws InterruptedException {
         if (buffer.num == 1000) return;
 
-        int rand = ThreadLocalRandom.current().nextInt(500, 600 + 1);
+        int rand = ThreadLocalRandom.current().nextInt(1, 1000 + 1);
+        //int rand=1000;
         this.producto_add(rand);
         Thread.sleep(rand); //aca duerme
         if (Thread.interrupted()) {

@@ -35,7 +35,7 @@ public class Log implements Runnable {
             BufferedWriter bw = new BufferedWriter(fw);
             PrintWriter pw = new PrintWriter(bw);
 
-            pw.printf("\"Segundos\"" + "," + "\"Buffer\"");
+            pw.printf("\"Segundos\"" + "," + "\"Buffer\""+","+"\"Cantidad \"");
             for (int i = 0; i < cantidad; i++) {
 
                 pw.printf("," + '"' + consumerThread[i].getName() + '"');
@@ -50,7 +50,7 @@ public class Log implements Runnable {
                 }
                 segundos += 2;
 
-                pw.printf(segundos + "," + buffer.store_queue.size());
+                pw.printf(segundos + "," + buffer.store_queue.size()+","+buffer.num);
                 for (int i = 0; i < cantidad; i++) {
                     threadState = consumerThread[i].getState().toString();
                     // pw.printf(","+consumerThread[i].getState());
