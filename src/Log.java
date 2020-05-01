@@ -1,32 +1,23 @@
-import javax.swing.*;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Date;
 
 public class Log implements Runnable {
 
     private Buffer buffer;
     private Thread[] consumerThread;
-    int cantidad;
+    private String threadState;
+    private int cantidad;
     String filepath = "log.csv";
-    private int segundos=0;
+    private int segundos = 0;
 
 
-    public Log(Buffer buffer, Thread consumerThread[], int cantidad_consumidores) {
+    public Log(Buffer buffer, Thread[] consumerThread, int cantidad_consumidores) {
         this.buffer = buffer;
         this.consumerThread = consumerThread;
         cantidad = cantidad_consumidores;
-
     }
-
-    private static ThreadLocal<Date> starDate = new ThreadLocal<Date>() { //no anda
-        protected Date InitialValue() {
-            return new Date();
-        }
-    };
-
     @Override
     public void run() {
         try {
@@ -34,9 +25,10 @@ public class Log implements Runnable {
             BufferedWriter bw = new BufferedWriter(fw);
             PrintWriter pw = new PrintWriter(bw);
 
-            pw.printf("\"Segundos\"" + "," + "\"Buffer\"");
+            pw.printf("\"Segundos\"" + "  ,  " + "\"Buffer\"");
             for (int i = 0; i < cantidad; i++) {
-                pw.printf("," + '"' + consumerThread[i].getName() + '"');
+
+                pw.printf("  ,  " + '"' + consumerThread[i].getName() + '"');
             }
             pw.println();
 
@@ -46,16 +38,16 @@ public class Log implements Runnable {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                segundos+=2;
-                System.out.println("El buffer posee:" + buffer.store_queue.size()+" elementos.");
-                for (int i = 0;i<cantidad;i++){
-                    System.out.println("El estado de "+ consumerThread[i].getName() + " es " + consumerThread[i].getState() + "\n");
-                }
+                segundos += 2;
 
-                pw.printf(segundos + "," + buffer.store_queue.size());
+                pw.printf("       "+segundos + "                     " + buffer.store_queue.size());
                 for (int i = 0; i < cantidad; i++) {
-
-                    pw.printf("," + consumerThread[i].getState());
+                    threadState = consumerThread[i].getState().toString();
+                    if (threadState.equals("TIMED_WAITING")) {
+                        pw.printf("    ,        " + "Consumiendo");
+                    } else{
+                        pw.printf("    ,          " + "Disponible");
+                    }
                 }
                 pw.println();
                 pw.flush();
@@ -64,20 +56,11 @@ public class Log implements Runnable {
                 }
             }
             pw.close();
-            System.out.println("Ejecución Finalizada");
-            System.out.println(buffer.num);
-            System.out.println("El buffer posee: "+ buffer.store_queue.size()+ " elementos.");
-            for (int i = 0;i<cantidad;i++){
-                System.out.println("El estado de "+ consumerThread[i].getName() + " es " + consumerThread[i].getState());
-            }
-            System.out.println("\n");
-            }
-        catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
-        }finally {
-            Thread.interrupted(); //no llega aca
+        } finally {
+            System.out.println("LOG en la carpeta.");
+            Thread.interrupted();
         }
-
-
     }
 }

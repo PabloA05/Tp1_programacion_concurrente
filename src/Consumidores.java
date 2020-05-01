@@ -1,31 +1,18 @@
-import java.util.concurrent.ThreadLocalRandom;
-
 public class Consumidores implements Runnable {
-    private Buffer buffer;
+    private Buffer buffer;//Se crea una variable de tipo Buffer
 
+    //Inicializa el objeto Consumidores
     public Consumidores(Buffer buffer) {
-        this.buffer = buffer;
+        this.buffer = buffer;//Se almacena el buffer en la variable
     }
 
+    //Sobreescribe el metodo run
     @Override
     public void run() {
-       while ((buffer.num<1000)){
-            try {
-                if (buffer.num==1000){
-                    break;
-                }
-                int rand = ThreadLocalRandom.current().nextInt(1, 150 + 1);
-                Thread.sleep(rand);
-                buffer.consume();
-                if (buffer.num==1000){
-                    break;
-                }
-
-            }
-            catch  (InterruptedException e) {
-                System.out.println("Algo NULL en buffer.consume(), mal!");
-                e.printStackTrace();
-            }
+        //Mientras la cantidad de operaciones sea menor a 1000 ejecuta el codigo
+        while ((buffer.num < 1000)) {
+                buffer.consume();//Ejecuta consume del buffer
         }
+        System.out.println(Thread.currentThread().getName() + " TERMINO");//Imprime por pantalla cuando el hilo se finaliza
     }
 }

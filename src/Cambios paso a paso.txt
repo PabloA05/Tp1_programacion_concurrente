@@ -1,0 +1,21 @@
+Clase Buffer
+1-Sacar el signalAll del get
+2-Poner todo el código de reposition en el try y eliminar los unlocks que no esten en el finally
+3-Sacar el catch del NullPointerException en reposition
+4-Sacar el try catch del NullPointerException en set
+5-Sacar el try catch del NullPointerException en consume
+6-Poner todo el código de consume en el try y eliminar los unlocs que no esten en el finally
+7-Sacar el try catch de IllegalMonitorState en el finally de consume
+8-Pasar el catch de InterruptedException del try adentro del while al try general de consume
+9-Poner lo que hace get adentro del consume
+10-Poner lo que hace set adentro del reposition
+11-Eliminar el throw de LimiteException de reposition
+
+Clase Productores
+1-Eliminar el try catch de LimiteException en run
+2-Poner lo que hace el cocinar adentro del run
+3-Eliminar el producto_add y pasar directamente el dato al reposition
+4-Eliminar el remove y todo lo relacionado a la lista
+
+Clase Consumidores
+1-Eliminar el try catch de NullPointerException en run
