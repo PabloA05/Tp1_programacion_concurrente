@@ -10,19 +10,11 @@ public class Consumidores implements Runnable {
     public void run() {
         while ((buffer.num < 1000)) {
             try {
-                try {
-                    int sleep=buffer.consume();
-                    if (sleep!=0){
-                        System.out.println(Thread.currentThread().getName()+" SLEEP NUMERO: "+sleep);
-                        Thread.sleep(sleep);
-                    }
-
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+                int sleep = buffer.consume();
+                if (sleep != 0) {
+                    Thread.sleep(sleep);
                 }
-
-            } catch (NullPointerException e) {
-                System.out.println("Algo NULL en buffer.consume(), mal!");
+            } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }

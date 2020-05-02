@@ -3,53 +3,52 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class Productores implements Runnable {
     private Buffer buffer;
-    private LinkedList<Integer> list_products = new LinkedList<>();
+    //private LinkedList<Integer> list_products = new LinkedList<>();
+    int producto;
 
 
     public Productores(Buffer buffer) {
         this.buffer = buffer;
     }
 
-    private void producto_add(Integer producto) {
-        list_products.add(producto);
-    }
 
-    public Integer head_list_products() {
-        return list_products.getFirst();
-    }
-
-    private void cocinar() throws InterruptedException {
+    private void cocinar() {
         if (buffer.num == 1000) return;
-
-        int rand = ThreadLocalRandom.current().nextInt(1, 1000 + 1);
+        int rand = ThreadLocalRandom.current().nextInt(500, 1200 + 1);
         //int rand=1000;
-        this.producto_add(rand);
-        Thread.sleep(rand); //aca duerme
-        if (Thread.interrupted()) {
-            throw new InterruptedException();
-        }
+        //this.list_products.add(rand);
+        producto = rand;
     }
 
     @Override
     public void run() {
+        while ((buffer.num < 1000)) {
+            cocinar();
+            //buffer.reposition(list_products.poll()); //Le estoy pasando un numero
+            try {
+                Thread.sleep(producto); //aca duerme
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            buffer.reposition(producto);
+        }
+        System.out.println(Thread.currentThread().getName() + " TERMINO");
+    }
+}
+/*
+    public void run() {
 
         while ((buffer.num < 1000)) {
-            try {
-                cocinar();
-                if (buffer.num == 1000) break;
-                try {
-                    buffer.reposition(head_list_products()); //Le estoy pasando un numero
-                    if (buffer.num == 1000) break;
-                    list_products.remove(); //Lo hice asi porque podria hacer que los productores sigan produciendo pero no lo pide el tp asi que no lo inclui
-                } catch (LimiteException e) {
-                    list_products.clear();
-                    System.out.println("Se elimino todo de: " + Thread.currentThread().getName());
-                }
-            } catch (InterruptedException e) {
-                System.out.println("Paso algo muy malo en el run() de Productores");
-            }
+            cocinar();
+            boolean check = buffer.reposition(head_list_products()); //Le estoy pasando un numero
+            if (buffer.num == 1000) break;
+            if (check) {
+                System.out.println("se borro todo");
+                list_products.clear();
+            } else
+                list_products.remove(); //Lo hice asi porque podria hacer que los productores sigan produciendo pero no lo pide el tp asi que no lo inclui;
         }
         System.out.println(Thread.currentThread().getName() + " TERMINO");
         Thread.currentThread().interrupt();
     }
-}
+}*/
