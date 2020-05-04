@@ -3,7 +3,7 @@ public class Main {
 
         boolean fairMode = true;
         int productores_cantidad=5;
-        int consumideres_cantidad=10;
+        int consumideres_cantidad=5;
 
         Buffer buffer = new Buffer(fairMode);
 
