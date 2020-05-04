@@ -47,6 +47,7 @@ public class Log implements Runnable {
                     } else {
                         pw.printf("," + "Disponible");
                     }
+                    //pw.printf("," + consumerThread[i].getState());
                 }
                 pw.println();
                 pw.flush();

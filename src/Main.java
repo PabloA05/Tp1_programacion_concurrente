@@ -2,14 +2,11 @@ public class Main {
     public static void main(String[] args) {
 
         boolean fairMode = true;
-        int productores_cantidad=10;
+        int productores_cantidad=5;
         int consumideres_cantidad=10;
 
         Buffer buffer = new Buffer(fairMode);
-        //Productores prod=new Productores(buffer);
-        //prod.start();
 
-        //Thread[] productores = new Thread[productores_cantidad];
         Productores[] productores=new Productores[productores_cantidad];
         for (int i = 0; i < productores_cantidad; i++) {
             productores[i] = new Productores(buffer);

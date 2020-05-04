@@ -16,34 +16,6 @@ public class Buffer {
         call = lockQueue.newCondition();
     }
 
-
-/*
-    public boolean reposition(int productores_list) {
-        lockQueue.lock();
-
-        if (num == 1000) {
-            lockQueue.unlock();
-            return false;
-        }
-        if (store_queue.size() >= capacity) {
-            lockQueue.unlock();
-            return true;
-        } else {
-            store_queue.add(productores_list);
-            System.out.printf("Tamano de la lista en store:%s\n", store_queue.size());
-            System.out.println(Thread.currentThread().getName() + " entro a reposition, con el numero: " + productores_list);
-            System.out.println();
-            try {
-                return false;
-            } finally {
-                call.signalAll();
-                lockQueue.unlock();
-            }
-
-        }
-    }
-*/
-
     public void reposition(int producto) {
         lockQueue.lock();
         if (num != 1000) {
