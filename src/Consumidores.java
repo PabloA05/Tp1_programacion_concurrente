@@ -1,4 +1,4 @@
-public class Consumidores implements Runnable {
+public class Consumidores extends Thread {
     private Buffer buffer;
 
     public Consumidores(Buffer buffer) {

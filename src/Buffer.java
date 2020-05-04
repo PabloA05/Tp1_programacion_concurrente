@@ -8,7 +8,7 @@ public class Buffer {
 
     public int num;
     private ReentrantLock lockQueue;
-    public Condition call;
+    private Condition call;
     final int capacity = 25;
 
     public Queue<Integer> store_queue = new LinkedList<Integer>();

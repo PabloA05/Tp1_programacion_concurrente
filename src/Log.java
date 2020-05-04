@@ -12,15 +12,21 @@ public class Log implements Runnable {
     String filepath = "log.csv";
     //private Date date;
     //java.util.Date test_date=new Date();
-    private int Iteraciones = 0;
+    //private int Iteraciones = 0;
+
+    public Log(Buffer buffer, Consumidores[] consumidores, int consumideres_cantidad) {
+        this.buffer = buffer;
+        this.consumerThread = consumidores;
+        cantidad = consumideres_cantidad;
+    }
 
 
-    public Log(Buffer buffer, Thread[] consumerThread, int cantidad_consumidores) {
+    /*public Log(Buffer buffer, Thread[] consumerThread, int cantidad_consumidores) {
         this.buffer = buffer;
         this.consumerThread = consumerThread;
         cantidad = cantidad_consumidores;
         //date=new Date();
-    }
+    }*/
 
     /*  private static ThreadLocal<Date> starDate = new ThreadLocal<Date>() { //no anda
           protected Date InitialValue() {

@@ -1,7 +1,8 @@
 import java.util.LinkedList;
 import java.util.concurrent.ThreadLocalRandom;
 
-public class Productores implements Runnable {
+//public class Productores implements Runnable {
+public class Productores extends Thread{
     private Buffer buffer;
     //private LinkedList<Integer> list_products = new LinkedList<>();
     int producto;
@@ -14,10 +15,9 @@ public class Productores implements Runnable {
 
     private void cocinar() {
         if (buffer.num == 1000) return;
-        int rand = ThreadLocalRandom.current().nextInt(500, 1200 + 1);
         //int rand=1000;
         //this.list_products.add(rand);
-        producto = rand;
+        producto = ThreadLocalRandom.current().nextInt(500, 1200 + 1);
     }
 
     @Override

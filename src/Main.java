@@ -6,14 +6,19 @@ public class Main {
         int consumideres_cantidad=10;
 
         Buffer buffer = new Buffer(fairMode);
+        //Productores prod=new Productores(buffer);
+        //prod.start();
 
-        Thread[] productores = new Thread[productores_cantidad];
+        //Thread[] productores = new Thread[productores_cantidad];
+        Productores[] productores=new Productores[productores_cantidad];
         for (int i = 0; i < productores_cantidad; i++) {
-            productores[i] = new Thread(new Productores(buffer), "Productores_"+ i);
+            productores[i] = new Productores(buffer);
+            productores[i].setName("Productores_"+i);
         }
-        Thread[] consumidores = new Thread[consumideres_cantidad];
+        Consumidores[] consumidores = new Consumidores[consumideres_cantidad];
         for (int i = 0; i < consumideres_cantidad; i++) {
-            consumidores[i] = new Thread(new Consumidores(buffer),"Consumidores_"+i);
+            consumidores[i] = new Consumidores(buffer);
+            consumidores[i].setName("Consumidores_"+i);
         }
         Thread log=new Thread(new Log(buffer,consumidores,consumideres_cantidad),"LOG");
         log.start();
