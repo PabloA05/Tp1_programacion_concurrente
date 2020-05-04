@@ -10,9 +10,6 @@ public class Log implements Runnable {
     private String threadState;
     private int cantidad;
     String filepath = "log.csv";
-    //private Date date;
-    //java.util.Date test_date=new Date();
-    //private int Iteraciones = 0;
 
     public Log(Buffer buffer, Consumidores[] consumidores, int consumideres_cantidad) {
         this.buffer = buffer;
@@ -20,19 +17,6 @@ public class Log implements Runnable {
         cantidad = consumideres_cantidad;
     }
 
-
-    /*public Log(Buffer buffer, Thread[] consumerThread, int cantidad_consumidores) {
-        this.buffer = buffer;
-        this.consumerThread = consumerThread;
-        cantidad = cantidad_consumidores;
-        //date=new Date();
-    }*/
-
-    /*  private static ThreadLocal<Date> starDate = new ThreadLocal<Date>() { //no anda
-          protected Date InitialValue() {
-              return new Date();
-          }
-      };*/
     @Override
     public void run() {
         long startTime = System.currentTimeMillis();
@@ -41,7 +25,6 @@ public class Log implements Runnable {
             BufferedWriter bw = new BufferedWriter(fw);
             PrintWriter pw = new PrintWriter(bw);
 
-           //pw.printf("\"Iteraciones\"" + "," + "\"Buffer\"" + "," + "\"Cantidad \"");
             pw.printf( "\"Buffer\"" + "," + "\"Cantidad \"");
             for (int i = 0; i < cantidad; i++) {
 
@@ -55,8 +38,7 @@ public class Log implements Runnable {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                //Iteraciones++;
-                //pw.printf(Iteraciones + "," + buffer.store_queue.size() + "," + buffer.num);
+
                 pw.printf(buffer.store_queue.size() + "," + buffer.num);
                 for (int i = 0; i < cantidad; i++) {
                     threadState = consumerThread[i].getState().toString();
@@ -71,11 +53,9 @@ public class Log implements Runnable {
             }
             pw.close();
 
-            //JOptionPane.showMessageDialog(null, "Guardado");
         } catch (
                 IOException e) {
             e.printStackTrace();
-            //JOptionPane.showMessageDialog(null, "No guardado");
         } finally {
             System.out.println("LOG en la carpeta.");
         }

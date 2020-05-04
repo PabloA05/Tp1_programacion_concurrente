@@ -1,12 +1,10 @@
 import java.util.LinkedList;
 import java.util.concurrent.ThreadLocalRandom;
 
-//public class Productores implements Runnable {
-public class Productores extends Thread{
+public class Productores extends Thread {
     private Buffer buffer;
-    //private LinkedList<Integer> list_products = new LinkedList<>();
-    int producto;
 
+    int producto;
 
     public Productores(Buffer buffer) {
         this.buffer = buffer;
@@ -24,7 +22,6 @@ public class Productores extends Thread{
     public void run() {
         while ((buffer.num < 1000)) {
             cocinar();
-            //buffer.reposition(list_products.poll()); //Le estoy pasando un numero
             try {
                 Thread.sleep(producto); //aca duerme
             } catch (InterruptedException e) {

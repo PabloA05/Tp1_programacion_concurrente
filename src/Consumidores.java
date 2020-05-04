@@ -10,9 +10,9 @@ public class Consumidores extends Thread {
     public void run() {
         while ((buffer.num < 1000)) {
             try {
-                int sleep = buffer.consume();
-                if (sleep != 0) {
-                    Thread.sleep(sleep);
+                int producto = buffer.consume();
+                if (producto != 0) {
+                    Thread.sleep(producto);
                 }
             } catch (InterruptedException e) {
                 e.printStackTrace();

@@ -5,12 +5,10 @@ import java.util.concurrent.locks.ReentrantLock;
 
 public class Buffer {
 
-
     public int num;
     private ReentrantLock lockQueue;
     private Condition call;
     final int capacity = 25;
-
     public Queue<Integer> store_queue = new LinkedList<Integer>();
 
     public Buffer(boolean fairMode) {
