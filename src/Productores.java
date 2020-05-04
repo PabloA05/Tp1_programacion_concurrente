@@ -3,7 +3,7 @@ import java.util.concurrent.ThreadLocalRandom;
 public class Productores extends Thread {
     private Buffer buffer;
 
-    int producto;
+    private int producto;
 
     public Productores(Buffer buffer) {
         this.buffer = buffer;

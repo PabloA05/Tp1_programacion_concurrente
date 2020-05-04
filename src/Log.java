@@ -9,7 +9,7 @@ public class Log implements Runnable {
     private Thread[] consumerThread;
     private String threadState;
     private int cantidad;
-    String filepath = "log.csv";
+    private String filepath = "log.csv";
 
     public Log(Buffer buffer, Consumidores[] consumidores, int consumideres_cantidad) {
         this.buffer = buffer;
