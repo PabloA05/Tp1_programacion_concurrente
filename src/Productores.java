@@ -12,9 +12,7 @@ public class Productores extends Thread {
 
     private void cocinar() {
         if (buffer.num == 1000) return;
-        //int rand=1000;
-        producto = ThreadLocalRandom.current().nextInt(300, 600+ 1);
-        //producto = rand;
+        producto = ThreadLocalRandom.current().nextInt(300, 600 + 1);
     }
 
     @Override
